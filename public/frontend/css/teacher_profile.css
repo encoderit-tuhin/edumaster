@@ -1,0 +1,51 @@
+/* teacher section start */
+.teacher_section {
+    background: #fff;
+    padding: 60px 0;
+}
+.teacher_section .teacher_box img {
+    border-radius: 50%;
+    object-fit: cover;
+    max-width: 200px;
+    width: 100%;
+    margin: 0 auto;
+    max-height: 200px;
+}
+.teacher_section .teacher_box {
+    box-shadow: 0 8px 8px 8px #ddd;
+    border-top: 8px solid #0C2340;
+    background: #fff;
+    text-align: center;
+    margin: 15px 0;
+    width: 100%;
+    padding: 30px 25px;
+    display: inline-block;
+    transition: all 0.5s ease;
+}
+.teacher_section .teacher_box p {margin-bottom: 0;}
+.teacher_section h5 {
+    margin-bottom: 5px;
+    color: #0C2340;
+    margin-top: 15px;
+    font-weight: 700;
+}
+.teacher_section .teacher_info {
+    box-shadow: 0 8px 8px 8px #ddd;
+    border-top: 8px solid #0C2340;
+    text-align: justify;
+    margin: 15px 0;
+    padding: 20px;
+}
+.teacher_section table td, 
+.teacher_section table th {
+    border: 1px solid #dee2e6;
+    vertical-align: top;
+}
+.teacher_section table {
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    width: 100%;
+    color: #212529;
+    border: 1px solid #dee2e6;
+}
+/* teacher section end */

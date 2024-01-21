@@ -1,0 +1,38 @@
+/* department section start */
+.department_section {
+    background: #fff;
+    padding: 60px 0;
+}
+.department_section .department_box {
+    box-shadow: 0 8px 8px 8px #ddd;
+    border-top: 8px solid #0C2340;
+    text-align: center;
+    background: #fff;
+    margin: 15px 0;
+    width: 100%;
+    padding: 30px 15px;
+    display: inline-block;
+    transition: all 0.5s ease;
+}
+.department_section .department_box:hover h5 {color: #AE9143;}
+.department_section h5 {
+    font-weight: 600;
+    font-size: 20px;
+    color: #0C2340;
+}
+.department_section .department_box:hover h4 {color: #0C2340;}
+.department_section h4 {
+    font-weight: 700;
+    font-size: 20px;
+    color: #AE9143;
+}
+.department_section h4,
+.department_section h5 {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 15px;
+    margin: 4px 0;
+    overflow: hidden;
+    transition: all .2s;
+}
+/* department section end */
