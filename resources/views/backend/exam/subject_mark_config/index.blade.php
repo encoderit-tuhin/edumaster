@@ -9,7 +9,6 @@
     .form_input_add_remove .form_group{
         display: flex;
         align-items: center;
-        justify-content: space-between;
         margin: 7px 0;
     }
     .form_input_add_remove .form_group label {
@@ -20,15 +19,15 @@
         margin-bottom: 50px;
     }
     .form_input_add_remove .right__form_g{
-        margin-left: 50px;
+        width: 57%;
     }
-    .form_input_add_remove .right__form_g,
     .form_input_add_remove .left__form_g{
-        width: calc(50% - 25px);
+        margin-right: 50px;
+        width: calc(43% - 50px);
     }
     .container_add_item .form_group .btn_remove{
         min-width: 45px;
-        margin-left: 20px;
+        margin-left: auto;
     }
     .form_input_add_remove .left_col{
         margin-right: 20px;
@@ -38,6 +37,11 @@
     }
     .exam_name{
         min-height: 34px;
+    }
+    .form_input_add_remove .right__form_g .form_group .w_40
+    {
+        width: 42%;
+        margin-right: 15px;
     }
 </style>
     <div class="row">
@@ -50,19 +54,25 @@
 
                 </div>
                 <div class="panel-body">
-                    <form class="form_input_add_remove form-horizontal form-groups-bordered validate">
+                    <form method="post" action="{{ route('subexam') }}"class="form_input_add_remove form-horizontal form-groups-bordered validate">
+                       @csrf
                         <div class="row_d">
                             <div class="left__form_g">
                                 <div class="form_group exam_name">
                                     <label class="control-label left_col" for="">Exam Name</label>
                                 </div>
                                 <div class="form_group">
-                                    <input class="form-control right_col" type="text" name="" id="" />
+                                    <input class="form-control right_col" type="text" name="name" id="" />
                                 </div>
                             </div>
                             <div class="right__form_g">
                                 <div class="form_group">
-                                    <label class="control-label left_col" for="">Sub Exam Name</label>
+                                    <div class="w_40">
+                                        <label class="control-label left_col" for="">Sub Exam Name</label>
+                                    </div>
+                                    <div class="w_40">
+                                        <label class="control-label left_col" for="">Percentage</label>
+                                    </div>
                                     <div class="right_col text-end">
                                         <button class="btn btn-info" type="button" onclick="addInputDiv()">
                                             Add
@@ -71,8 +81,13 @@
                                 </div>
                                 <div class="container_add_item right_col">
                                     <div class="form_group">
-                                        <input class="form-control" type="text" name="" id="" />
-                                        <button class="btn btn-danger btn-xs btn_remove" onclick="removeInputItem(this)">
+                                        <div class="w_40">
+                                            <input class="form-control" type="text" name="subname[]" id="" />
+                                        </div>
+                                        <div class="w_40">
+                                            <input class="form-control" type="text" name="marks[]" id="" />
+                                        </div>
+                                         <button class="btn btn-danger btn-xs btn_remove" onclick="removeInputItem(this)">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -80,7 +95,7 @@
                             </div>
                         </div>
                         <div class="">
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <input type="submit" class="btn btn-success" value="Apply">
                         </div>
                     </form>
                 </div>
@@ -90,38 +105,35 @@
                             <tr>
                                 <th>{{ _lang('SL') }}</th>
                                 <th>{{ _lang('Exam Name') }}</th>
-                                <th>{{ _lang('Exam Start At	') }}</th>
-                                <th>{{ _lang('Class') }}</th>
+                                <th>{{ _lang('Sub Exam') }}</th>
+                                <th>{{ _lang('Marks') }}</th>
                                 <th>{{ _lang('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($examSubjectMarkConfigs as $exam)
+                            @foreach ($subexams as $exam)
                                 <tr>
                                     <td class='exam_name'>{{ $loop->iteration }}</td>
                                     <td class='exam_name'>
-                                        @foreach ($allExams as $examName)
-                                            @if ($examName->id == $exam->exam_id)
-                                                {{$examName->name}}
-                                            @endif
-                                        @endforeach
+                                       {{$exam->exam_id}}
                                     </td>
-                                    <td class='date_time'>
-                                        @php
-                                            $dateTime =  $exam->date_time;
-                                            $formatDateTime = \Carbon\Carbon::parse($dateTime)->format('Y-m-d h:i A');
-                                        @endphp
-                                            {{ $formatDateTime }}
+                                    <td class='subname'>
+                                        {{$exam->subname}}
                                     </td>
                                     <td class='class'>
-                                        @foreach ($allclasses as $className)
-                                            @if ($className->id == $exam->class_id)
-                                                {{$className->class_name}}
-                                            @endif
-                                        @endforeach
+                                        {{$exam->marks}}
                                     </td>
-                                    <td class='action'><a href="{{ route('exams.all-exams-id', ['exam_id' => $exam->exam_id, 'class_id' => $exam->class_id]) }}"><i class="fa fa-eye"></i></a></td>
+                                    <td>
+                                        <form action="{{ route('subexam.delete', ['id' => $exam->id]) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this subexam?')">
+                                            @csrf
+                                            @method('DELETE') <!-- Add this line to specify the DELETE method -->
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>
@@ -140,10 +152,16 @@
     createNewItem.classList.add('form_group');
     createNewItem.innerHTML =
       `
-      <input class="form-control" type="text" name="" id="" />
+      <div class="w_40">
+        <input class="form-control" type="text" name="subname[]" id="" />
+      </div>
+      <div class="w_40">
+        <input class="form-control" type="text" name="marks[]" id="" />
+      </div>
       <button class="btn btn-danger btn-xs btn_remove" onclick="removeInputItem(this)">
-        <i class="fa fa-trash" aria-hidden="true"></i>
-      </button>
+           <i class="fa fa-trash" aria-hidden="true"></i>
+       </button>
+
       `;
 
     document.querySelector(".container_add_item").appendChild(createNewItem);

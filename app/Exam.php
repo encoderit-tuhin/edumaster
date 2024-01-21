@@ -12,4 +12,5 @@ class Exam extends Model
      * @var string
      */
     protected $table = 'exams';
+    protected $fillable = ['exam_code', 'name'];
 }

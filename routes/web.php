@@ -462,6 +462,9 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::post('exams/get_subject', 'ExamController@get_subject');
 		Route::post('exams/get_teacher_subject', 'ExamController@get_teacher_subject');
 		Route::resource('exams', 'ExamController');
+		Route::post('exam/sub-exams', 'ExamController@subExamStore')->name('subexam');
+		Route::delete('exam/sub-exams/{id}', 'ExamController@subExamDelete')->name('subexam.delete');
+
 
 
 		//Grade Controller

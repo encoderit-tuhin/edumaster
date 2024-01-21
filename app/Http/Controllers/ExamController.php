@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exam;
+use App\Subexam;
 use Validator;
 use App\Student;
 use App\Subject;
@@ -486,5 +487,40 @@ class ExamController extends Controller
 		$subjects = Subject::select('subject_name', 'id')->get();
 
 		return view('backend.exam.subject_mark_config.list', compact('examSubjectMarkConfigs', 'allExam', 'allclasses', 'subjects'));
+	}
+	public function subExamStore(Request $request){
+
+		// $exam = new Exam;
+		// $exam->name=$request->name;
+		// $exam->exam_code=2342321;
+		$exam = Exam::firstOrCreate(
+			['exam_code' => rand(0,5)],
+			['name' => $request->name]
+		);
+		// dd($exam);
+		$exam->save();
+		foreach ($request->subname as $key => $value) {
+            $subexam = new Subexam;
+            $subexam->exam_id = $exam->id;
+            $subexam->subname = $value;
+            $subexam->marks = $request->marks[$key];
+            // dd($subexam);
+            $subexam->save();
+        }
+		$subexams = Subexam::all();
+		// dd($subexams);
+		return view('backend.exam.subject_mark_config.index', compact('subexams'));
+		// return redirect()->back();
+
+	}
+	public function subExamDelete($id){
+		$subexam = Subexam::find($id);
+if ($subexam) {
+        $subexam->delete();
+        return redirect()->back()->with('success', 'Subexam deleted successfully.');
+    } else {
+        return redirect()->back()->with('error', 'Subexam not found.');
+    }
+
 	}
 }
