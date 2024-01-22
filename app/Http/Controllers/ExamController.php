@@ -489,38 +489,45 @@ class ExamController extends Controller
 		return view('backend.exam.subject_mark_config.list', compact('examSubjectMarkConfigs', 'allExam', 'allclasses', 'subjects'));
 	}
 	public function subExamStore(Request $request){
-
-		// $exam = new Exam;
-		// $exam->name=$request->name;
-		// $exam->exam_code=2342321;
-		$exam = Exam::firstOrCreate(
-			['exam_code' => rand(0,5)],
-			['name' => $request->name]
-		);
-		// dd($exam);
-		$exam->save();
-		foreach ($request->subname as $key => $value) {
-            $subexam = new Subexam;
-            $subexam->exam_id = $exam->id;
-            $subexam->subname = $value;
-            $subexam->marks = $request->marks[$key];
-            // dd($subexam);
-            $subexam->save();
-        }
-		$subexams = Subexam::all();
-		// dd($subexams);
-		return view('backend.exam.subject_mark_config.index', compact('subexams'));
-		// return redirect()->back();
-
+		if ($request->isMethod('post')) {
+			// Only proceed if the request method is POST
+	
+			$exam = Exam::firstOrCreate(
+				['exam_code' => rand(0, 5)],
+				['name' => $request->name]
+			);
+			$exam->save();
+	
+			foreach ($request->subname as $key => $value) {
+				$subexam = new Subexam;
+				$subexam->exam_id = $exam->id;
+				$subexam->subname = $value;
+				$subexam->marks = $request->marks[$key];
+				$subexam->save();
+			}
+	
+			$subexams = Subexam::with('exam')->get();
+	
+			return view('backend.exam.subject_mark_config.index', compact('subexams'));
+		} else {
+			return response()->json(['message' => 'Invalid request method.']);
+		}
 	}
-	public function subExamDelete($id){
-		$subexam = Subexam::find($id);
-if ($subexam) {
-        $subexam->delete();
-        return redirect()->back()->with('success', 'Subexam deleted successfully.');
-    } else {
-        return redirect()->back()->with('error', 'Subexam not found.');
+	public function getSubExam(){
+		$subexams = Subexam::with('exam')->get();
+	return view('backend.exam.subject_mark_config.index', compact('subexams'));
+	}
+	
+	public function subExamDelete($id)
+{
+     $subexam = Subexam::find($id);
+if (!$subexam) {
+	return redirect()->route('getSubexam');
+
     }
+$subexam->delete();
+return redirect()->route('getSubexam');
 
-	}
+}
+
 }

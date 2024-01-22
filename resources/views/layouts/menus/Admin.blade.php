@@ -380,8 +380,8 @@
                 @endif
 
                 @if ($user->can('exam_mark_configuration.view'))
-                    <li @if (Request::is('exams/all-exams')) class="active" @endif>
-                        <a href="{{ url('exams/all-exams') }}">
+                    <li @if (Request::is('exams/get-sub-exams')) class="active" @endif>
+                        <a href="{{ url('exams/get-sub-exams') }}">
                             {{ _lang('Exams') }}
                         </a>
                     </li>

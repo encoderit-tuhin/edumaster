@@ -97,9 +97,22 @@ use App\Http\Controllers\Frontend\StudentOnlineRegistrationController;
 use App\Http\Controllers\AccountFundSummaryMonthlyWiseTransferController;
 use App\Http\Controllers\GeneralCertificateController;
 use App\Http\Controllers\HscRecommendationController;
-
+use App\Subexam;
 Route::get('/login', function () {
 	return redirect('login');
+});
+Route::get('/data', function () {
+	$subexams = Subexam::with('exam')->get();
+	dd($subexams);
+
+	foreach ($subexams as $subexam) {
+        $examName = $subexam->exam->name;
+        // Access other properties as needed
+        $examId = $subexam->exam->id;
+
+        // Do something with the data
+        dd($examName, $examId);
+    }
 });
 
 Auth::routes();
@@ -463,11 +476,10 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::post('exams/get_teacher_subject', 'ExamController@get_teacher_subject');
 		Route::resource('exams', 'ExamController');
 		Route::post('exam/sub-exams', 'ExamController@subExamStore')->name('subexam');
+		Route::get('exam/get-sub-exams', 'ExamController@getSubExam')->name('getSubexam');
 		Route::delete('exam/sub-exams/{id}', 'ExamController@subExamDelete')->name('subexam.delete');
 
-
-
-		//Grade Controller
+       //Grade Controller
 		Route::resource('grades', 'GradeController');
 
 		//Mark Distribution Controller

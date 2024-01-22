@@ -116,7 +116,7 @@
                                 <tr>
                                     <td class='exam_name'>{{ $loop->iteration }}</td>
                                     <td class='exam_name'>
-                                       {{$exam->exam_id}}
+                                        {{ $exam->exam->name }}
                                     </td>
                                     <td class='subname'>
                                         {{$exam->subname}}
@@ -132,7 +132,7 @@
                                                 <i class="fa fa-trash"></i> Delete
                                             </button>
                                         </form>
-                                    </td>
+                                       </td>
                                     
                                 </tr>
                             @endforeach

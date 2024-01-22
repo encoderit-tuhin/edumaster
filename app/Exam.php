@@ -13,4 +13,7 @@ class Exam extends Model
      */
     protected $table = 'exams';
     protected $fillable = ['exam_code', 'name'];
+    public function subexam(){
+        return $this->hasOne(Subexam::class);
+    }
 }
